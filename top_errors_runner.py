@@ -1,6 +1,5 @@
 # top_errors_runner.py
 import json
-from __future__ import annotations
 import argparse
 from collections import defaultdict
 from pathlib import Path
