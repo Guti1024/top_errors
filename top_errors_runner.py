@@ -1,4 +1,5 @@
 # top_errors_runner.py
+import json
 from __future__ import annotations
 import argparse
 from collections import defaultdict
@@ -94,7 +95,7 @@ def main():
 
     logs = parse_tokens_from_file(path)
     result = top_errors(logs)
-    print(result)
+    print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
 
 if __name__ == "__main__":
     main()
