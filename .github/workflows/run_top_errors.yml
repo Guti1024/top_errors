@@ -1,0 +1,43 @@
+name: Run top_errors
+
+on:
+  workflow_dispatch:
+    inputs:
+      logfile:
+        description: "Repo 안 로그 파일 경로 (예: logs/sample.log). 비워도 됨"
+        required: false
+        default: "logs/sample.log"
+      log_content:
+        description: "로그 내용을 직접 붙여넣기(선택). 값이 있으면 이걸로 실행"
+        required: false
+        default: ""
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run top_errors_runner.py
+        shell: bash
+        run: |
+          set -e
+
+          LOGFILE="${{ inputs.logfile }}"
+          LOG_CONTENT="${{ inputs.log_content }}"
+
+          if [ -n "$LOG_CONTENT" ]; then
+            echo "Using log_content input (creating logs/input.log)"
+            mkdir -p logs
+            printf "%s" "$LOG_CONTENT" > logs/input.log
+            LOGFILE="logs/input.log"
+          fi
+
+          echo "Running with logfile: $LOGFILE"
+          python top_errors_runner.py --logfile "$LOGFILE"
